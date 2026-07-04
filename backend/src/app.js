@@ -13,13 +13,9 @@ const __dirname = path.dirname(__filename);
 const App = express();
 
 // ---------- CORS ----------
-const allowedOrigin =
-  process.env.NODE_ENV === "production"
-    ? undefined // reflect request origin in production
-    : "http://localhost:3000";
 App.use(
   cors({
-    origin: allowedOrigin,
+    origin: (origin, callback) => callback(null, origin || "*"),
     credentials: true,
   })
 );
