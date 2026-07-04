@@ -1,17 +1,23 @@
-import { useState } from "react";
-
-const DEFAULT_CATEGORIES = ["Clothing", "Men", "Women", "Kids", "Accessories", "Electronics"];
+import { useState, useEffect } from "react";
+import { useCategories } from "../../categories/category.context";
 
 function ShopForm({ onAddShop }) {
+  const { shopCategories } = useCategories();
   const [formData, setFormData] = useState({
     name: "",
     description: "",
     contact: "",
-    category: DEFAULT_CATEGORIES[0],
+    category: "",
     location: "",
     posterimage: "",
   });
   const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    if (shopCategories.length > 0 && !formData.category) {
+      setFormData((prev) => ({ ...prev, category: shopCategories[0]._id }));
+    }
+  }, [shopCategories, formData.category]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -38,7 +44,7 @@ function ShopForm({ onAddShop }) {
       name: "",
       description: "",
       contact: "",
-      category: DEFAULT_CATEGORIES[0],
+      category: shopCategories[0]?._id || "",
       location: "",
       posterimage: "",
     });
@@ -70,8 +76,8 @@ function ShopForm({ onAddShop }) {
         <label className="block text-sm text-slate-600">
           <span className="mb-2 block">Category</span>
           <select name="category" value={formData.category} onChange={handleChange} className="w-full rounded-xl border border-slate-300 px-3 py-2">
-            {DEFAULT_CATEGORIES.map((c) => (
-              <option key={c} value={c}>{c}</option>
+            {shopCategories.map((c) => (
+              <option key={c._id} value={c._id}>{c.name}</option>
             ))}
           </select>
         </label>

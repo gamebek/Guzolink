@@ -10,7 +10,7 @@ function ProductCard({ product }) {
         <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-amber-700">
           {product.badge}
         </span>
-        <span className="text-sm text-slate-500">{product.category}</span>
+        <span className="text-sm text-slate-500">{product.category?.name || product.category}</span>
       </div>
 
       <div className="mb-4 rounded-2xl bg-slate-100 p-8 text-center text-4xl">

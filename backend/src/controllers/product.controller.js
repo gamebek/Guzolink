@@ -3,7 +3,7 @@ import Shop from "../models/shop.model.js";
 
 export async function GetAllShopProducts(req, res) {
   try {
-    const products = await Product.find().populate("shop", "name location");
+    const products = await Product.find().populate("shop", "name location").populate("category", "name");
 
     if (!products || products.length === 0) {
       return res.status(404).json({ success: false, message: "No products found!" });
@@ -19,7 +19,7 @@ export async function GetAllShopProducts(req, res) {
 export async function GetAllMerchantShopProducts(req, res) {
   try {
     const { shopId } = req.params;
-    const products = await Product.find({ shop: shopId });
+    const products = await Product.find({ shop: shopId }).populate("category", "name");
 
     if (!products || products.length === 0) {
       return res.status(404).json({ success: false, message: "No products found for this shop" });
@@ -46,7 +46,7 @@ export async function CreateMerchantShopProduct(req, res) {
       return res.status(403).json({ success: false, message: "Unauthorized or shop does not exist" });
     }
 
-    const product = await Product.create({
+    let product = await Product.create({
       name,
       description,
       price,
@@ -55,6 +55,7 @@ export async function CreateMerchantShopProduct(req, res) {
       shop: shopId,
       image,
     });
+    product = await product.populate("category", "name");
 
     return res.status(201).json({ success: true, message: "Product created successfully", product });
   } catch (error) {
@@ -78,7 +79,7 @@ export async function UpdateMerchantShopProduct(req, res) {
       return res.status(403).json({ success: false, message: "Unauthorized to update this product" });
     }
 
-    const updatedProduct = await Product.findByIdAndUpdate(id, updates, { new: true });
+    const updatedProduct = await Product.findByIdAndUpdate(id, updates, { new: true }).populate("category", "name");
 
     return res.status(200).json({ success: true, message: "Product updated successfully", product: updatedProduct });
   } catch (error) {

@@ -38,7 +38,7 @@ function ProductDetails() {
           <p className="text-lg text-slate-600">{product.description}</p>
 
           <div className="grid grid-cols-2 gap-4 rounded-2xl bg-slate-50 p-4 text-sm text-slate-700">
-            <div><span className="block text-slate-500">Category</span>{product.category}</div>
+            <div><span className="block text-slate-500">Category</span>{product.category?.name || product.category}</div>
             <div><span className="block text-slate-500">Price</span>${product.price}</div>
             <div><span className="block text-slate-500">Stock</span>{product.stock}</div>
             <div><span className="block text-slate-500">Badge</span>{product.badge}</div>

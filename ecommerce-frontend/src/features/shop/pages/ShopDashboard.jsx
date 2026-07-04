@@ -54,7 +54,7 @@ function ShopDashboard() {
               <div key={product._id} className="rounded-2xl border border-white/10 bg-white/5 p-4 flex flex-col justify-between">
                 <div>
                   <h4 className="text-lg font-semibold text-white">{product.name}</h4>
-                  <p className="text-sm text-slate-400 mb-2">{product.category} • ${product.price}</p>
+                  <p className="text-sm text-slate-400 mb-2">{product.category?.name || product.category} • ${product.price}</p>
                   <p className="text-sm text-slate-300 line-clamp-2 mb-4">{product.description}</p>
                 </div>
                 <div className="flex gap-2">

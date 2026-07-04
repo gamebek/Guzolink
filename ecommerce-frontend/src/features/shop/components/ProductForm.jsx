@@ -1,13 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useCategories } from "../../categories/category.context";
 
-const DEFAULT_CATEGORIES = ["Clothing", "Men", "Women", "Kids", "Accessories", "Electronics"];
 const COMMON_SIZES = ["XS", "S", "M", "L", "XL", "XXL", "30", "32", "34", "36"];
 
 function ProductForm({ onAddItem }) {
+  const { productCategories } = useCategories();
   const [formData, setFormData] = useState({
     name: "",
     price: "",
-    category: DEFAULT_CATEGORIES[0],
+    category: "",
     sizes: [],
     color: "",
     stock: "",
@@ -19,6 +20,12 @@ function ProductForm({ onAddItem }) {
     freeShipping: false,
   });
   const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    if (productCategories.length > 0 && !formData.category) {
+      setFormData((prev) => ({ ...prev, category: productCategories[0]._id }));
+    }
+  }, [productCategories, formData.category]);
 
   const handleChange = (event) => {
     const { name, value, type, checked } = event.target;
@@ -70,7 +77,7 @@ function ProductForm({ onAddItem }) {
     setFormData({
       name: "",
       price: "",
-      category: DEFAULT_CATEGORIES[0],
+      category: productCategories[0]?._id || "",
       sizes: [],
       color: "",
       stock: "",
@@ -105,8 +112,8 @@ function ProductForm({ onAddItem }) {
           <label className="block text-sm text-slate-600">
             <span className="mb-2 block">Category</span>
             <select name="category" value={formData.category} onChange={handleChange} className="w-full rounded-xl border border-slate-300 px-3 py-2">
-              {DEFAULT_CATEGORIES.map((c) => (
-                <option key={c} value={c}>{c}</option>
+              {productCategories.map((c) => (
+                <option key={c._id} value={c._id}>{c.name}</option>
               ))}
             </select>
           </label>
