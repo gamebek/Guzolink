@@ -1,12 +1,26 @@
 import { useNavigate, useParams, Link } from "react-router-dom";
 import ProductForm from "../components/ProductForm";
 import { request } from "../../../shared/lib/apiClient";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function CreateProduct() {
   const { shopId } = useParams();
   const navigate = useNavigate();
   const [error, setError] = useState("");
+  const [shop, setShop] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const data = await request(`/api/shop/${shopId}`);
+        if (data.success) {
+          setShop(data.shop);
+        }
+      } catch (err) {
+        console.error("Failed to fetch shop:", err.message);
+      }
+    })();
+  }, [shopId]);
 
   const handleAddItem = async (payload) => {
     try {
@@ -42,7 +56,7 @@ function CreateProduct() {
         </div>
       )}
 
-      <ProductForm onAddItem={handleAddItem} />
+      <ProductForm onAddItem={handleAddItem} shop={shop} />
     </div>
   );
 }

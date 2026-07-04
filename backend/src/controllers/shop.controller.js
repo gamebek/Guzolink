@@ -49,7 +49,7 @@ export async function GetAllMerchantShops(req, res) {
   try {
     const userid = req.user.id;
     console.log("User id:", userid);
-    const shops = await Shop.find({ owner: userid });
+    const shops = await Shop.find({ owner: userid }).populate("category", "name");
 
     if (!shops || shops.length === 0) {
       return res
@@ -72,7 +72,7 @@ export async function GetAllMerchantShops(req, res) {
 export async function GetMerchantShopDetails(req, res) {
   try {
     const { id } = req.params;
-    const existingShop = await Shop.findOne({ _id: id });
+    const existingShop = await Shop.findOne({ _id: id }).populate("category", "name");
 
     if (!existingShop) {
       return res.status(400).json({

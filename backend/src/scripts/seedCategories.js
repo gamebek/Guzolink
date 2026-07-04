@@ -24,7 +24,7 @@ try {
 
   const defaultProductCategories = [
     "Clothing", "Men", "Women", "Kids", "Accessories", 
-    "Electronics", "Home & Kitchen", "Books", "Toys"
+    "Electronics", "Home & Kitchen", "Books", "Toys", "Jewelry"
   ];
 
   console.log("Seeding Shop Categories...");

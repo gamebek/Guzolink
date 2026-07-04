@@ -1,9 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useCategories } from "../../categories/category.context";
 
-const COMMON_SIZES = ["XS", "S", "M", "L", "XL", "XXL", "30", "32", "34", "36"];
-
-function ProductForm({ onAddItem }) {
+function ProductForm({ onAddItem, shop }) {
   const { productCategories } = useCategories();
   const [formData, setFormData] = useState({
     name: "",
@@ -21,11 +19,59 @@ function ProductForm({ onAddItem }) {
   });
   const [message, setMessage] = useState("");
 
-  useEffect(() => {
-    if (productCategories.length > 0 && !formData.category) {
-      setFormData((prev) => ({ ...prev, category: productCategories[0]._id }));
+  const filteredCategories = useMemo(() => {
+    if (!shop?.category?.name) return productCategories;
+    const shopCat = shop.category.name.toLowerCase();
+    if (shopCat === "clothing") {
+      return productCategories.filter(c => 
+        ["clothing", "men", "women", "kids"].includes(c.name.toLowerCase())
+      );
     }
-  }, [productCategories, formData.category]);
+    if (shopCat === "jewelry") {
+      return productCategories.filter(c => 
+        ["jewelry", "accessories"].includes(c.name.toLowerCase())
+      );
+    }
+    if (shopCat === "electronics") {
+      return productCategories.filter(c => 
+        c.name.toLowerCase() === "electronics"
+      );
+    }
+    return productCategories;
+  }, [productCategories, shop]);
+
+  useEffect(() => {
+    if (filteredCategories.length > 0) {
+      const isStillValid = filteredCategories.some(c => c._id === formData.category);
+      if (!isStillValid) {
+        setFormData((prev) => ({ ...prev, category: filteredCategories[0]._id }));
+      }
+    }
+  }, [filteredCategories, formData.category]);
+
+  const shopCatName = shop?.category?.name?.toLowerCase() || "";
+  const isClothing = shopCatName === "clothing";
+  const isJewelry = shopCatName === "jewelry";
+
+  const sizeOptions = useMemo(() => {
+    if (isClothing) return ["XS", "S", "M", "L", "XL", "XXL"];
+    if (isJewelry) return ["5", "6", "7", "8", "9", "10", "One Size"];
+    return [];
+  }, [isClothing, isJewelry]);
+
+  const sizeLabel = isClothing 
+    ? "Sizes (select any)"
+    : isJewelry
+      ? "Ring Sizes (select any)"
+      : "";
+
+  const colorLabel = isJewelry ? "Material / Color" : "Color";
+  
+  const colorPlaceholder = isJewelry
+    ? "Gold, Silver, Platinum"
+    : isClothing
+      ? "Black, Blue"
+      : "Black, White, Silver";
 
   const handleChange = (event) => {
     const { name, value, type, checked } = event.target;
@@ -77,7 +123,7 @@ function ProductForm({ onAddItem }) {
     setFormData({
       name: "",
       price: "",
-      category: productCategories[0]?._id || "",
+      category: filteredCategories[0]?._id || "",
       sizes: [],
       color: "",
       stock: "",
@@ -112,15 +158,15 @@ function ProductForm({ onAddItem }) {
           <label className="block text-sm text-slate-600">
             <span className="mb-2 block">Category</span>
             <select name="category" value={formData.category} onChange={handleChange} className="w-full rounded-xl border border-slate-300 px-3 py-2">
-              {productCategories.map((c) => (
+              {filteredCategories.map((c) => (
                 <option key={c._id} value={c._id}>{c.name}</option>
               ))}
             </select>
           </label>
 
           <label className="block text-sm text-slate-600">
-            <span className="mb-2 block">Color</span>
-            <input name="color" value={formData.color} onChange={handleChange} className="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="Black, Blue" />
+            <span className="mb-2 block">{colorLabel}</span>
+            <input name="color" value={formData.color} onChange={handleChange} className="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder={colorPlaceholder} />
           </label>
         </div>
 
@@ -129,21 +175,23 @@ function ProductForm({ onAddItem }) {
           <input name="image" value={formData.image} onChange={handleChange} className="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="https://example.com/image.jpg" />
         </label>
 
-        <div className="space-y-2">
-          <span className="block text-sm text-slate-600">Sizes (select any)</span>
-          <div className="flex flex-wrap gap-2">
-            {COMMON_SIZES.map((s) => (
-              <button
-                key={s}
-                type="button"
-                onClick={() => toggleSize(s)}
-                className={`rounded-full border px-3 py-1 text-sm ${formData.sizes.includes(s) ? 'bg-amber-500 text-black' : 'bg-white text-slate-700'}`}
-              >
-                {s}
-              </button>
-            ))}
+        {sizeOptions.length > 0 && (
+          <div className="space-y-2">
+            <span className="block text-sm text-slate-600">{sizeLabel}</span>
+            <div className="flex flex-wrap gap-2">
+              {sizeOptions.map((s) => (
+                <button
+                  key={s}
+                  type="button"
+                  onClick={() => toggleSize(s)}
+                  className={`rounded-full border px-3 py-1 text-sm ${formData.sizes.includes(s) ? 'bg-amber-500 text-black' : 'bg-white text-slate-700'}`}
+                >
+                  {s}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         <label className="block text-sm text-slate-600">
           <span className="mb-2 block">SKU</span>
