@@ -28,6 +28,10 @@ function ShopDashboard() {
   return (
     <div className="mx-auto max-w-7xl p-6 sm:px-6 lg:px-8">
       <div className="mb-8 rounded-3xl border border-white/10 bg-slate-800 p-8 shadow-sm">
+        <Link to="/shops" className="inline-flex items-center gap-1 text-sm text-slate-400 hover:text-white transition mb-2">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+          Back to shops
+        </Link>
         <h2 className="text-3xl font-bold text-white mb-2">{shop.name}</h2>
         <p className="text-slate-300 mb-6">{shop.description}</p>
 
