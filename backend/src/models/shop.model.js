@@ -1,42 +1,41 @@
 import mongoose from "../utils/mongoose.util.js";
 
-const BookSchema = new mongoose.Schema({
-	title: {
+const ShopSchema = new mongoose.Schema({
+	name: {
 		type: String,
 		required: true,
 		unique: true,
 	},
-
 	description: {
 		type: String,
 	},
-	author: {
+	contact: {
 		type: String,
 		required: true,
+	},
+	owner: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: "User",
 	},
 	category: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: "Category",
+		ref: "ShopCategory",
 		required: true,
 	},
-	publishdate: {
-		type: String,
-		required: true,
+	products:{
+		type: mongoose.Schema.Types.ObjectId,
+		ref: "Product",
 	},
-	pages: {
-		type: Number,
+	orders: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: "Order",
 	},
 	rating: {
 		type: Number,
+		min: 0,
+		max: 5,
 	},
-	price: {
-		type: Number,
-	},
-	language: {
-		type: String,
-	},
-
-	publisher: {
+	location: {
 		type: String,
 	},
 	posterimage: {
@@ -48,7 +47,12 @@ const BookSchema = new mongoose.Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "User",
 	},
-});
+},
+{
+	timestamps: true
+}
 
-const BookModel = mongoose.model("Book", BookSchema);
-export default BookModel;
+);
+
+const ShopModel = mongoose.model("Shop", ShopSchema);
+export default ShopModel;

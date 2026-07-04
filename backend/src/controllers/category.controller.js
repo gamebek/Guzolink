@@ -1,4 +1,4 @@
-import CategoryModel from "../models/category.model.js";
+import CategoryModel from "../models/shopCategory.model.js";
 
 export async function CreateCategory(req, res) {
 	try {
