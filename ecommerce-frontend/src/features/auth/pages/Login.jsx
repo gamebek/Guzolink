@@ -27,7 +27,7 @@ function Login() {
     setLoading(false);
 
     if (result.success) {
-      navigate("/products");
+      navigate("/shops");
       return;
     }
 

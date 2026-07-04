@@ -1,8 +1,8 @@
 import { useState } from "react";
 import ProductCard from "../components/ProductCard";
 import { useCatalog } from "../catalog.context";
-import ShopForm from "../../shop-admin/components/ShopForm";
-import ShopRequestPanel from "../../shop-admin/components/ShopRequestPanel";
+import ShopForm from "../../shop/components/ShopForm";
+import ShopRequestPanel from "../../shop/components/ShopRequestPanel";
 
 function Products() {
   const { products, addProduct, updateProduct, deleteProduct } = useCatalog();

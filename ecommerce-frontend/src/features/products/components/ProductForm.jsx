@@ -3,7 +3,7 @@ import { useState } from "react";
 const DEFAULT_CATEGORIES = ["Clothing", "Men", "Women", "Kids", "Accessories", "Electronics"];
 const COMMON_SIZES = ["XS", "S", "M", "L", "XL", "XXL", "30", "32", "34", "36"];
 
-function ShopForm({ onAddItem }) {
+function ProductForm({ onAddItem }) {
   const [formData, setFormData] = useState({
     name: "",
     price: "",
@@ -115,17 +115,12 @@ function ShopForm({ onAddItem }) {
             <span className="mb-2 block">Color</span>
             <input name="color" value={formData.color} onChange={handleChange} className="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="Black, Blue" />
           </label>
-
-          <label className="block text-sm text-slate-600">
-            <span className="mb-2 block">Stock</span>
-            <input type="number" name="stock" value={formData.stock} onChange={handleChange} className="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="10" min="0" />
-          </label>
-
-          <label className="block text-sm text-slate-600">
-            <span className="mb-2 block">Image URL</span>
-            <input name="image" value={formData.image} onChange={handleChange} className="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="https://example.com/image.jpg" />
-          </label>
         </div>
+
+        <label className="block text-sm text-slate-600">
+          <span className="mb-2 block">Image URL</span>
+          <input name="image" value={formData.image} onChange={handleChange} className="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="https://example.com/image.jpg" />
+        </label>
 
         <div className="space-y-2">
           <span className="block text-sm text-slate-600">Sizes (select any)</span>
@@ -135,7 +130,8 @@ function ShopForm({ onAddItem }) {
                 key={s}
                 type="button"
                 onClick={() => toggleSize(s)}
-                className={`rounded-full border px-3 py-1 text-sm ${formData.sizes.includes(s) ? 'bg-amber-500 text-black' : 'bg-white text-slate-700'}`}>
+                className={`rounded-full border px-3 py-1 text-sm ${formData.sizes.includes(s) ? 'bg-amber-500 text-black' : 'bg-white text-slate-700'}`}
+              >
                 {s}
               </button>
             ))}
@@ -164,13 +160,11 @@ function ShopForm({ onAddItem }) {
 
         <label className="block text-sm text-slate-600">
           <span className="mb-2 block">Description</span>
-          <textarea name="description" value={formData.description} onChange={handleChange} rows="3" className="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="Short item details..." />
+          <textarea name="description" value={formData.description} onChange={handleChange} rows={3} className="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="Short item details..." />
         </label>
 
         <div className="flex items-center gap-4">
-          <button type="submit" className="rounded-full bg-slate-900 px-5 py-3 font-semibold text-white">
-            Add item
-          </button>
+          <button type="submit" className="rounded-full bg-slate-900 px-5 py-3 font-semibold text-white">Add item</button>
           {formData.image ? (
             <img src={formData.image} alt="preview" className="h-12 w-12 rounded-md object-cover" />
           ) : null}
@@ -180,4 +174,4 @@ function ShopForm({ onAddItem }) {
   );
 }
 
-export default ShopForm;
+export default ProductForm;
