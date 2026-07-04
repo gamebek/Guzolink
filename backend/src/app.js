@@ -12,11 +12,18 @@ const __dirname = path.dirname(__filename);
 
 const App = express();
 
-// cors
-App.use(cors());
-
-//body parser
-App.use(cors());
+// ---------- CORS ----------
+const allowedOrigin =
+  process.env.NODE_ENV === "production"
+    ? undefined // reflect request origin in production
+    : "http://localhost:3000";
+App.use(
+  cors({
+    origin: allowedOrigin,
+    credentials: true,
+  })
+);
+// ---------- Body parser ----------
 App.use(express.json());
 App.use(express.urlencoded({ extended: true }));
 App.use(morgan("common"));
