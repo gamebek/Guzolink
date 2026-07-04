@@ -1,11 +1,11 @@
 import { useState } from "react";
-import ProductCart from "../components/productCart";
-import { useProducts } from "../context/products";
-import ShopForm from "../feat-form/ShopForm";
-import ShopRequestPanel from "../feat-form/ShopRequestPanel";
+import ProductCard from "../components/ProductCard";
+import { useCatalog } from "../catalog.context";
+import ShopForm from "../../shop-admin/components/ShopForm";
+import ShopRequestPanel from "../../shop-admin/components/ShopRequestPanel";
 
 function Products() {
-  const { products, addProduct, updateProduct, deleteProduct } = useProducts();
+  const { products, addProduct, updateProduct, deleteProduct } = useCatalog();
   const [editingId, setEditingId] = useState(null);
   const [editForm, setEditForm] = useState({ name: "", price: "", category: "", stock: "" });
 
@@ -84,7 +84,7 @@ function Products() {
 
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         {products.map((product) => (
-          <ProductCart key={product.id} product={product} />
+          <ProductCard key={product.id} product={product} />
         ))}
       </div>
     </div>

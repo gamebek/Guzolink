@@ -42,7 +42,6 @@ function ShopForm({ onAddItem }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Basic validation
     if (!formData.name || !formData.price) {
       setMessage("Please provide at least a name and price.");
       return;

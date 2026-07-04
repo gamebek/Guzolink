@@ -1,8 +1,10 @@
 import { Link, NavLink } from "react-router-dom";
-import { useProducts } from "../context/products";
+import { useCart } from "../features/cart/cart.context";
+import { useAuth } from "../features/auth/auth.context";
 
 function Navbar() {
-  const { cart, user, logout } = useProducts();
+  const { cart } = useCart();
+  const { user, logout } = useAuth();
 
   return (
     <header className="border-b border-slate-200 bg-white/90 backdrop-blur">
@@ -27,7 +29,7 @@ function Navbar() {
           {user ? (
             <>
               <span className="hidden rounded-full bg-slate-100 px-3 py-1 text-sm text-slate-700 sm:inline">
-                Hi, {user.name}
+                Hi, {user.username}
               </span>
               <button onClick={logout} className="rounded-full border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700">
                 Logout

@@ -1,9 +1,9 @@
 import Hero from "../components/Hero";
-import ProductCart from "../components/productCart";
-import { useProducts } from "../context/products";
+import ProductCard from "../features/catalog/components/ProductCard";
+import { useCatalog } from "../features/catalog/catalog.context";
 
 function Home() {
-  const { products } = useProducts();
+  const { products } = useCatalog();
 
   return (
     <div>
@@ -21,7 +21,7 @@ function Home() {
 
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {products.slice(0, 3).map((product) => (
-            <ProductCart key={product.id} product={product} />
+            <ProductCard key={product.id} product={product} />
           ))}
         </div>
       </section>
