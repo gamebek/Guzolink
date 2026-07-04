@@ -22,7 +22,7 @@ function Home() {
         {loading ? (
           <p className="text-white">Loading products...</p>
         ) : error ? (
-          <p className="text-red-400">{error}</p>
+          <p className="text-red-400">{error.message}</p>
         ) : (
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             {products.slice(0, 3).map((product) => (

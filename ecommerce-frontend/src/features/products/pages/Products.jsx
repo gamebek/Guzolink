@@ -17,7 +17,7 @@ function Products() {
       {loading ? (
         <p className="text-white">Loading products...</p>
       ) : error ? (
-        <p className="text-red-400">{error}</p>
+        <p className="text-red-400">{error.message}</p>
       ) : products.length === 0 ? (
         <p className="text-slate-300">No products available at the moment.</p>
       ) : (

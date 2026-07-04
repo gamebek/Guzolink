@@ -1,27 +1,27 @@
-import { useEffect, useState } from "react";
-import { request } from "../../../shared/lib/apiClient";
+import { gql } from "@apollo/client";
+import { useQuery } from "@apollo/client/react";
+
+const GET_ALL_SHOP_PRODUCTS = gql`
+  query GetAllShopProducts {
+    allShopProducts {
+      _id
+      name
+      description
+      price
+      stock
+      category
+      shop
+      image
+      createdAt
+      updatedAt
+    }
+  }
+`;
 
 export default function useProducts() {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const { loading, error, data } = useQuery(GET_ALL_SHOP_PRODUCTS);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const data = await request("/api/product/all-shop-products");
-        if (data.success) {
-          setProducts(data.products);
-        } else {
-          setError(data.message);
-        }
-      } catch (e) {
-        setError(e.message);
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, []);
+  const products = data?.allShopProducts ?? [];
 
   return { products, loading, error };
 }

@@ -1,56 +1,53 @@
-import { useEffect, useState } from "react";
-import { request } from "../../../shared/lib/apiClient";
+import { gql } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client/react";
+
+const GET_SHOP_PRODUCTS = gql`
+  query ShopProducts($shopId: ID!) {
+    shopProducts(shopId: $shopId) {
+      _id
+      name
+      description
+      price
+      stock
+      category
+      shop
+      image
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+const DELETE_PRODUCT = gql`
+  mutation DeleteProduct($id: ID!) {
+    deleteProduct(id: $id)
+  }
+`;
 
 export default function useShopProducts(shopId) {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const { loading, error, data, refetch } = useQuery(GET_SHOP_PRODUCTS, {
+    variables: { shopId },
+    skip: !shopId,
+  });
 
-  const fetchProducts = async () => {
-    setLoading(true);
-    try {
-      const data = await request(`/api/product/shop/${shopId}`);
-      if (data.success) {
-        setProducts(data.products);
-      } else {
-        // If 404, it means no products yet, which is fine
-        if (data.message.includes("No products found")) {
-          setProducts([]);
-        } else {
-          setError(data.message);
-        }
-      }
-    } catch (e) {
-      if (e.message.includes("404")) {
-        setProducts([]);
-      } else {
-        setError(e.message);
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [deleteProductMutation] = useMutation(DELETE_PRODUCT);
 
-  useEffect(() => {
-    if (shopId) {
-      fetchProducts();
-    }
-  }, [shopId]);
+  const products = data?.shopProducts ?? [];
 
   const deleteProduct = async (productId) => {
     try {
-      const data = await request(`/api/product/${productId}`, {
-        method: "DELETE",
-      });
-      if (data.success) {
-        setProducts((prev) => prev.filter((p) => p._id !== productId && p.id !== productId));
-      } else {
-        alert(data.message);
-      }
+      await deleteProductMutation({ variables: { id: productId } });
+      refetch();
     } catch (err) {
       alert(err.message);
     }
   };
 
-  return { products, loading, error, fetchProducts, deleteProduct };
+  return {
+    products,
+    loading,
+    error: error?.message ?? "",
+    fetchProducts: refetch,
+    deleteProduct,
+  };
 }

@@ -8,7 +8,7 @@ function ProductDetails() {
   const { addToCart } = useCart();
   
   if (loading) return <div className="p-16 text-center text-white">Loading...</div>;
-  if (error) return <div className="p-16 text-center text-red-400">{error}</div>;
+  if (error) return <div className="p-16 text-center text-red-400">{error.message}</div>;
 
   const product = products.find((item) => String(item._id || item.id) === String(id));
 
