@@ -5,15 +5,20 @@ import ShopForm from "../components/ShopForm";
 
 function CreateShop() {
   const navigate = useNavigate();
-  const [form, setForm] = useState({ name: "", description: "", contact: "", category: "" });
+  const [form, setForm] = useState({
+    name: "",
+    description: "",
+    contact: "",
+    category: "",
+  });
   const [error, setError] = useState("");
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm(f => ({ ...f, [name]: value }));
+    setForm((f) => ({ ...f, [name]: value }));
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     try {
@@ -32,7 +37,7 @@ function CreateShop() {
     }
   };
 
-  return <ShopForm/>
+  return <ShopForm onAddShop={handleSubmit} />;
 }
 
 export default CreateShop;

@@ -1,13 +1,13 @@
 import { Link } from "react-router-dom";
 import ShopCard from "../components/ShopCard";
-import useShops from "../hooks/useShops";
+import {useShops} from "../shop.context.js";
 
 function MyShops() {
-  const { shops, error, handleDelete } = useShops();
+  const { shops, error, deleteShop } = useShops();
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-semibold mb-4">My Shops</h2>
+    <div className="p-3">
+      {error && <p className="text-red-600 rounded-2xl text-center font-bold mb-4 border border-red-500 p-5">{error}</p>}
       <Link
         to="/shop/create"
         className="inline-flex items-center rounded-lg bg-amber-500 px-4 py-2 text-sm font-medium text-slate-900 hover:bg-amber-400 transition mb-4"
@@ -15,19 +15,17 @@ function MyShops() {
         + Add New Shop
       </Link>
 
-      {error && <p className="text-red-600 mb-4">{error}</p>}
-
       <div className="grid gap-4 md:grid-cols-2">
         {shops.map((shop) => (
-          <ShopCard key={shop._id} shop={shop} onDelete={handleDelete} />
+          <ShopCard key={shop._id} shop={shop} onDelete={deleteShop} />
         ))}
       </div>
 
       {/* Merchant details section */}
-      <div className="mt-8">
-        <h3 className="text-xl font-semibold text-white mb-2">All Merchants</h3>
-        <p className="text-slate-300">Merchant information will be displayed here.</p>
-      </div>
+      {/* <div className="mt-8">
+        <h3 className="text-lg font-semibold text-white mb-2">All Shops Summary </h3>
+        <p className="text-slate-300 rounded-2xl text-center border border-amber-300 p-5">Shop information will be displayed here.</p>
+      </div> */}
     </div>
   );
 }

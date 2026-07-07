@@ -18,8 +18,8 @@ import UpdateUserInfo from "./features/auth/pages/Update";
 import Dashboard from "./features/auth/pages/Dashboard";
 
 // essentials
-import CreateShop from "./features/shop/pages/CreateShop";
 import MyShops from "./features/shop/pages/MyShops";
+import CreateShop from "./features/shop/pages/CreateShop";
 import CreateProduct from "./features/shop/pages/CreateProduct";
 import Products from "./features/products/pages/Products";
 
@@ -38,33 +38,6 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-
-          <Route
-            path="/shop/create"
-            element={
-              <ProtectedRoute>
-                <CreateShop />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/shops"
-            element={
-              <ProtectedRoute>
-                <MyShops />
-              </ProtectedRoute>
-            }
-          />
-          {/* TODO: update the shop path from the dashboard page */}
-          {/* <Route
-            path="/shop/:shopId"
-            element={
-              <ProtectedRoute>
-                <ShopDashboard />
-              </ProtectedRoute>
-            }
-          /> */}
           <Route
             path="/profile/:userId"
             element={
@@ -82,15 +55,49 @@ function App() {
               </ProtectedRoute>
             }
           />
-
+          
           <Route
+            path="/shops"
+            element={
+              <ProtectedRoute>
+                <MyShops />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/shop/create"
+            element={
+              <ProtectedRoute>
+                <CreateShop />
+              </ProtectedRoute>
+            }
+          />
+             {/* <Route
+            path="/shop/:shopId"
+            element={
+              <ProtectedRoute>
+                <Shop />
+              </ProtectedRoute>
+            }
+          /> */}
+
+          {/* <Route
             path="/shop/:shopId/product/create"
             element={
               <ProtectedRoute>
                 <CreateProduct />
               </ProtectedRoute>
             }
-          />
+          /> */}
+          {/* TODO: update the shop path from the dashboard page */}
+          {/* <Route
+            path="/shop/:shopId"
+            element={
+              <ProtectedRoute>
+                <ShopDashboard />
+              </ProtectedRoute>
+            }
+          /> */}
 
           <Route path="/products" element={<Products />} />
         </Routes>

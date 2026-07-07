@@ -7,7 +7,8 @@ export const graphqlHandler = createHandler({
   schema,
   rootValue: resolvers,
   context: (request) => {
-    // Express adds `user` via IsLoggedIn middleware for REST routes; for GraphQL we need to extract token manually?
+    // Express adds `user` via IsLoggedIn middleware for REST routes; 
+    // for GraphQL we need to extract token manually?
     // For simplicity, we reuse the same middleware by attaching user to request earlier if needed.
     return { user: request.user };
   },
