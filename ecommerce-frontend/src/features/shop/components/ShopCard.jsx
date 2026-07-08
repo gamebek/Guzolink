@@ -2,16 +2,16 @@ import { Link } from "react-router-dom";
 
 function ShopCard({ shop, onDelete }) {
   return (
-    <div className="relative rounded-xl overflow-hidden shadow-lg">
+    <div className="relative rounded-xl overflow-hidden shadow-lg transform transition-shadow duration-300 hover:scale-[1.01]">
       <div className="relative rounded-xl overflow-hidden shadow-lg">
         <img
-          src={shop.posterimage || "https://picsum.photos"}
+          src={shop.posterimage || "https://picsum.photos/200/300?random=1"}
           alt={shop.name}
           className="w-full h-48 object-cover"
           onError={(e) => {
             // Prevents infinite loops if the fallback fails
             e.currentTarget.onerror = null;
-            e.currentTarget.src = "https://placeholder.com";
+            e.currentTarget.src = "https://placeholder.com/200x300.png?text=No+Image";
           }}
         />
       </div>
@@ -30,6 +30,8 @@ function ShopCard({ shop, onDelete }) {
           <p className="mt-1 text-sm text-amber-500">Rating: {shop.rating}/5</p>
         )}
         <div className="mt-4 flex flex-wrap gap-2">
+          {/* TODO: implement the shop delete in the backend */}
+          
           <Link
             to={`/shop/${shop._id}`}
             className="inline-flex items-center rounded-lg bg-white/20 px-4 py-2 text-white font-medium hover:bg-white/30 transition"

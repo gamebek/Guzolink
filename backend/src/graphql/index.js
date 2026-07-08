@@ -3,7 +3,7 @@ import { schema } from "./typeDefs.js";
 import { resolvers } from "./resolvers.js";
 
 // Create GraphQL handler with context containing authenticated user (if any)
-export const graphqlHandler = createHandler({
+export const productHandler = createHandler({
   schema,
   rootValue: resolvers,
   context: (request) => {

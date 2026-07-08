@@ -17,19 +17,24 @@ import Signup from "./features/auth/pages/Signup";
 import UpdateUserInfo from "./features/auth/pages/Update";
 import Dashboard from "./features/auth/pages/Dashboard";
 
-// essentials
+// shops
 import MyShops from "./features/shop/pages/MyShops";
 import CreateShop from "./features/shop/pages/CreateShop";
-import CreateProduct from "./features/shop/pages/CreateProduct";
-import Products from "./features/products/pages/Products";
+import ShopDashboard from "./features/shop/pages/ShopDashboard";
 
+// products
+import Products from "./features/products/pages/Products";
+import CreateProduct from "./features/shop/pages/CreateProduct";
 import ProductDetails from "./features/products/pages/ProductDetails";
+
+// shoping and marketing
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 
-function App() {``
+function App() {
+  ``;
   return (
     <ApolloProvider client={client}>
       <div className="min-h-screen bg-linear-to-br from-slate-900 via-slate-800 to-slate-700 text-slate-100">
@@ -55,7 +60,7 @@ function App() {``
               </ProtectedRoute>
             }
           />
-          
+
           <Route
             path="shops"
             element={
@@ -72,32 +77,32 @@ function App() {``
               </ProtectedRoute>
             }
           />
-             {/* <Route
-            path="/shop/:shopId"
-            element={
-              <ProtectedRoute>
-                <Shop />
-              </ProtectedRoute>
-            }
-          /> */}
-
-          {/* <Route
-            path="/shop/:shopId/product/create"
-            element={
-              <ProtectedRoute>
-                <CreateProduct />
-              </ProtectedRoute>
-            }
-          /> */}
-          {/* TODO: update the shop path from the dashboard page */}
-          {/* <Route
+          <Route
             path="/shop/:shopId"
             element={
               <ProtectedRoute>
                 <ShopDashboard />
               </ProtectedRoute>
             }
-          /> */}
+          />
+
+          <Route
+            path="/shop/:shopId/product/create"
+            element={
+              <ProtectedRoute>
+                <CreateProduct />
+              </ProtectedRoute>
+            }
+          />
+          {/* TODO: update the shop path from the dashboard page */}
+          <Route
+            path="/shop/:shopId"
+            element={
+              <ProtectedRoute>
+                <ShopDashboard />
+              </ProtectedRoute>
+            }
+          />
 
           <Route path="/products" element={<Products />} />
         </Routes>

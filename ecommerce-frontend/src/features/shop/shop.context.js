@@ -16,6 +16,8 @@ function ShopProvider({children}) {
     const [shops, setShops] = useState([]);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [shopError, setShopError] = useState("");
+    
 
     const fetchShops = async () => {
         setLoading(true);
@@ -61,7 +63,7 @@ function ShopProvider({children}) {
 
     const deleteShop = async (id) => {
         try {
-            const data = await request(`/api/shop/${id}`, { method: "DELETE" });
+            const data = await request(`/api/shops/${id}`, { method: "DELETE" });
             if (data.success) {
                 setShops((prev) => prev.filter((s) => s._id !== id));
             } else {
@@ -72,14 +74,33 @@ function ShopProvider({children}) {
         }
     };
 
+    const fetchSingleShop = async (id) => {
+        setShopError(null);
+        try {
+            const data = await request(`/api/shops/${id}`);
+            if (data.success) {
+                return { success: true, shop: data.shop };
+            } else {
+                setShopError(data.message || "Failed to load shop");
+                return { success: false, message: data.message || "Failed to load shop" };
+            }
+        } catch (err) {
+            console.error("Error fetching shop:", err.message);
+            setShopError(err.message || "Failed to load shop");
+        } 
+    };
+
+
     const value = useMemo(() => ({
         shops,
         error,
+        shopError,
         loading,
         fetchShops,
         createShop,
         deleteShop,
-    }), [shops, error, loading]);
+        fetchSingleShop
+    }), [shops, error, shopError, loading]);
 
     return createElement(ShopContext.Provider, {value}, children);
 }
