@@ -29,7 +29,7 @@ import Checkout from "./pages/Checkout";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 
-function App() {
+function App() {``
   return (
     <ApolloProvider client={client}>
       <div className="min-h-screen bg-linear-to-br from-slate-900 via-slate-800 to-slate-700 text-slate-100">
@@ -57,7 +57,7 @@ function App() {
           />
           
           <Route
-            path="/shops"
+            path="shops"
             element={
               <ProtectedRoute>
                 <MyShops />

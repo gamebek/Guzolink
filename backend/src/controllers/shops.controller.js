@@ -53,7 +53,7 @@ export async function GetAllMerchantShops(req, res) {
     if (!shops || shops.length === 0) {
       return res
         .status(404)
-        .json({ success: false, message: "No shops found for this user please add new shop" });
+        .json({ success: false, message: "No shops found for this user please add new shop", shops: [] });
     }
 
     return res

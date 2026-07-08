@@ -7,68 +7,79 @@ import {
     createElement,
   } from "react";
 
-import {storage } from "../../shared/lib/storage";
 import { request } from "../../shared/lib/apiClient";
 
 const ShopContext = createContext(null);
 
 function ShopProvider({children}) {
-    const [shops, setShops] = useState(() => storage.shop.get());
+    // start empty — never seed from localStorage to avoid showing stale data
+    const [shops, setShops] = useState([]);
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        storage.shop.set(shops);
-    }, [shops]);
-
-    // 1. Fetch shops from the backend when the component mounts
     const fetchShops = async () => {
-        try{
-            const fetchShopsData = await request("/api/shops");
-            if (fetchShopsData.success) {
-                setShops(fetchShopsData.shops);
-            } else {
-                console.error("Error fetching shops:", fetchShopsData.message);
-            }
-        }catch (error) {    
-            console.error("Error fetching shops:", error);
-        }
-    }
-    // 2. create shop
-    const createShop = async (shopInfo) => {
+        setLoading(true);
+        setError(null);
         try {
-            const createShopData = await request("/api/shops", {
-                method: "POST",
-                body: JSON.stringify(shopInfo),
-            });
-            if (createShopData.success) {
-                setShops((prevShops) => [...prevShops, createShopData.shop]);
+            const data = await request("/api/shops");
+            if (data.success) {
+                setShops(data.shops || []);
             } else {
-                console.error("Error creating shop:", createShopData.message);
+                setError(data.message || "Failed to load shops");
+                setShops([]);
             }
-        } catch (error) {
-            console.error("Error creating shop:", error);
+        } catch (err) {
+            console.error("Error fetching shops:", err.message);
+            setError(err.message || "Failed to load shops");
+            setShops([]);
+        } finally {
+            setLoading(false);
         }
     };
 
-    // 3. Delete shop
+    // fetch fresh from backend on every mount
+    useEffect(() => {
+        fetchShops();
+    }, []);
+
+    const createShop = async (shopInfo) => {
+        try {
+            const data = await request("/api/shops", {
+                method: "POST",
+                body: JSON.stringify(shopInfo),
+            });
+            if (data.success) {
+                setShops((prev) => [...prev, data.shop]);
+                return { success: true, shop: data.shop, message: data.message || "Shop created successfully" };
+            }
+            return { success: false, message: data.message || "Failed to create shop" };
+        } catch (err) {
+            console.error("Error creating shop:", err.message);
+            return { success: false, message: err.message || "Failed to create shop" };
+        }
+    };
+
     const deleteShop = async (id) => {
-    try {
-      const data = await request(`/api/shop/${id}`, { method: "DELETE" });
-      if (data.success) {
-        setShops((prev) => prev.filter((s) => s._id !== id));
-      } else {
-        console.error("Error deleting shop:", data.message);
-      }
-    } catch (e) {
-      console.error("Error deleting shop:", e);
-    }
-  };
+        try {
+            const data = await request(`/api/shop/${id}`, { method: "DELETE" });
+            if (data.success) {
+                setShops((prev) => prev.filter((s) => s._id !== id));
+            } else {
+                console.error("Error deleting shop:", data.message);
+            }
+        } catch (err) {
+            console.error("Error deleting shop:", err);
+        }
+    };
 
     const value = useMemo(() => ({
         shops,
+        error,
+        loading,
         fetchShops,
         createShop,
         deleteShop,
-    }), [shops]);
+    }), [shops, error, loading]);
 
     return createElement(ShopContext.Provider, {value}, children);
 }

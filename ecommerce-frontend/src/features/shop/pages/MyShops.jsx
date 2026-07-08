@@ -7,19 +7,23 @@ function MyShops() {
 
   return (
     <div className="p-3">
-      {error && <p className="text-red-600 rounded-2xl text-center font-bold mb-4 border border-red-500 p-5">{error}</p>}
-      <Link
+     {error && <p className="text-red-600 rounded-2xl text-center font-bold mb-4 border border-red-500 p-5">{error}</p>}
+
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {!shops || shops.length === 0 ? (
+          <p className="text-red-600 rounded-2xl text-center font-bold mb-4 border border-red-500 p-5">You have no shops yet .</p>
+        ) : (
+          shops.map((shop) => (
+            <ShopCard key={shop._id} shop={shop} onDelete={deleteShop} />
+          ))
+        )}
+      </div>
+        <Link
         to="/shop/create"
         className="inline-flex items-center rounded-lg bg-amber-500 px-4 py-2 text-sm font-medium text-slate-900 hover:bg-amber-400 transition mb-4"
       >
         + Add New Shop
       </Link>
-
-      <div className="grid gap-4 md:grid-cols-2">
-        {shops.map((shop) => (
-          <ShopCard key={shop._id} shop={shop} onDelete={deleteShop} />
-        ))}
-      </div>
 
       {/* Merchant details section */}
       {/* <div className="mt-8">

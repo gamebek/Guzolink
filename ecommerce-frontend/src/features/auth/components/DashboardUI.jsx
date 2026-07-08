@@ -15,7 +15,7 @@ function DashboardUI({
 }) {
   return (
     // the top section of the dashboard contains, user name, profile picture and button to goto my profile page
-    <div className="mx-auto max-w-7xl p-6 sm:px-6 lg:px-8">
+    <div className="mx-auto p-6 sm:px-6 lg:px-8">
       {/* User Info Section */}
       <div className="flex items-center justify-between mb-8 rounded-3xl border border-white/10 bg-slate-800 p-8 shadow-sm">
         <h2 className="text-3xl font-bold text-white mb-2">

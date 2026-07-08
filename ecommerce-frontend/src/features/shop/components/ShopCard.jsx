@@ -3,24 +3,31 @@ import { Link } from "react-router-dom";
 function ShopCard({ shop, onDelete }) {
   return (
     <div className="relative rounded-xl overflow-hidden shadow-lg">
-      <img
-        src={shop.posterimage || "https://via.placeholder.com/400x200"}
-        alt={shop.name}
-        className="w-full h-48 object-cover"
-      />
+      <div className="relative rounded-xl overflow-hidden shadow-lg">
+        <img
+          src={shop.posterimage || "https://picsum.photos"}
+          alt={shop.name}
+          className="w-full h-48 object-cover"
+          onError={(e) => {
+            // Prevents infinite loops if the fallback fails
+            e.currentTarget.onerror = null;
+            e.currentTarget.src = "https://placeholder.com";
+          }}
+        />
+      </div>
       <div className="p-4 bg-white/10 backdrop-blur border-t border-white/10">
         <h3 className="text-xl font-semibold text-white">{shop.name}</h3>
         {shop.location && (
           <p className="text-sm text-slate-300">{shop.location}</p>
         )}
         {shop.contact && (
-          <p className="text-sm font-medium text-amber-400 mt-1">{shop.contact}</p>
+          <p className="text-sm font-medium text-amber-400 mt-1">
+            {shop.contact}
+          </p>
         )}
         <p className="mt-2 text-slate-200">{shop.description}</p>
         {shop.rating !== undefined && (
-          <p className="mt-1 text-sm text-amber-500">
-            Rating: {shop.rating}/5
-          </p>
+          <p className="mt-1 text-sm text-amber-500">Rating: {shop.rating}/5</p>
         )}
         <div className="mt-4 flex flex-wrap gap-2">
           <Link
