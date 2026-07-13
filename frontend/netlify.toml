@@ -1,0 +1,7 @@
+[build]
+  publish = "."    # Since index.html is in root of frontend
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
