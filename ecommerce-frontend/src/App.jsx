@@ -1,15 +1,14 @@
 import { Routes, Route } from "react-router-dom";
+import { ApolloProvider } from "@apollo/client/react";
+
 // globals
+import ProtectedRoute from "./components/ProtectedRoute";
+import { client } from "./providers/ApolloClient.js";
+
+// componenets
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
-import { ApolloClient, InMemoryCache, HttpLink } from "@apollo/client";
-import { ApolloProvider } from "@apollo/client/react";
-
-const client = new ApolloClient({
-  link: new HttpLink({ uri: "/graphql", credentials: "include" }),
-  cache: new InMemoryCache(),
-});
 
 // auth
 import Login from "./features/auth/pages/Login";
@@ -23,15 +22,12 @@ import CreateShop from "./features/shop/pages/CreateShop";
 import ShopDashboard from "./features/shop/pages/ShopDashboard";
 
 // products
-import Products from "./features/products/pages/Products";
-import CreateProduct from "./features/shop/pages/CreateProduct";
-import ProductDetails from "./features/products/pages/ProductDetails";
+import CreateProductCard from "./features/products/pages/CreateProduct";
+// import ProductDetails from "./features/products/pages/ProductDetails";
 
 // shoping and marketing
-import Cart from "./pages/Cart";
-import Checkout from "./pages/Checkout";
-
-import ProtectedRoute from "./components/ProtectedRoute";
+// import Cart from "./pages/Cart";
+// import Checkout from "./pages/Checkout";
 
 function App() {
   ``;
@@ -90,21 +86,11 @@ function App() {
             path="/shop/:shopId/product/create"
             element={
               <ProtectedRoute>
-                <CreateProduct />
-              </ProtectedRoute>
-            }
-          />
-          {/* TODO: update the shop path from the dashboard page */}
-          <Route
-            path="/shop/:shopId"
-            element={
-              <ProtectedRoute>
-                <ShopDashboard />
+                <CreateProductCard />
               </ProtectedRoute>
             }
           />
 
-          <Route path="/products" element={<Products />} />
         </Routes>
         <Footer />
       </div>
