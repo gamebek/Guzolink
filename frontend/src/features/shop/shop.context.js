@@ -31,7 +31,9 @@ function ShopProvider({ children }) {
   const [shops, setShops] = useState(() => storage.shops.get() || []);
 
   // Only show the full-page loading state if we have NOTHING cached yet.
-  const [isLoading, setIsLoading] = useState(() => storage.shops.get() === null);
+  const [isLoading, setIsLoading] = useState(
+    () => storage.shops.get() === null,
+  );
 
   // Separate from isLoading on purpose: this drives a small spinner on
   // the "Refresh" button, NOT a full-page loading screen. If we replaced
@@ -76,17 +78,17 @@ function ShopProvider({ children }) {
       console.error("Error fetching shops:", err.message);
       setShopError(err.message || "Failed to load shops");
     } finally {
-      if (!isMountedRef.current) {
-        return 
-      };
-      setIsLoading(false);
-      if (silent) setIsRefreshing(false);
+      if (isMountedRef.current) {
+        setIsLoading(false);
+        if (silent) setIsRefreshing(false);
+      }
     }
   };
 
   useEffect(() => {
     if (isAuthLoading) return; // wait for auth to resolve first
     if (!token) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- resetting loading state when auth resolves to "no user", not reacting to our own state change
       setIsLoading(false);
       return;
     }
@@ -103,7 +105,8 @@ function ShopProvider({ children }) {
     }
 
     fetchShops(); // first-ever load, nothing cached — show full loading state
-  }, [isAuthLoading, token]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- intentionally checking shops.length only on mount, not re-running when shops changes
+  }, [isAuthLoading, token]); //shops.length used inside, not listed as dependency on purpose: we only want to run this effect once per auth resolution, not every time the shop list changes
 
   const createShop = async (shopInfo) => {
     try {
@@ -123,10 +126,16 @@ function ShopProvider({ children }) {
           message: data.message || "Shop created successfully",
         };
       }
-      return { success: false, message: data.message || "Failed to create shop" };
+      return {
+        success: false,
+        message: data.message || "Failed to create shop",
+      };
     } catch (err) {
       console.error("Error creating shop:", err.message);
-      return { success: false, message: err.message || "Failed to create shop" };
+      return {
+        success: false,
+        message: err.message || "Failed to create shop",
+      };
     }
   };
 
@@ -155,7 +164,10 @@ function ShopProvider({ children }) {
         return { success: true, shop: data.shop };
       } else {
         setShopError(data.message || "Failed to load shop");
-        return { success: false, message: data.message || "Failed to load shop" };
+        return {
+          success: false,
+          message: data.message || "Failed to load shop",
+        };
       }
     } catch (err) {
       console.error("Error fetching shop:", err.message);
@@ -177,7 +189,8 @@ function ShopProvider({ children }) {
     [shops, isLoading, isRefreshing, shopError],
   );
 
-  return createElement(ShopContext.Provider, { value }, children);
+  // return createElement(ShopContext.Provider, { value }, children);
+  return createElement(<ShopContext.Provider value={value}>{children}</ShopContext.Provider>)
 }
 
 function useShops() {
