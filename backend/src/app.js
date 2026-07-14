@@ -38,6 +38,7 @@ App.use(morgan("dev"));
 //   });
 // }
 // routes
+App.get('/health', (req, res) => res.status(200).json({ status: 'ok' }));
 RegisterRoutes(App);
 
 export default App;

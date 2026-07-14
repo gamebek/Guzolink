@@ -1,8 +1,8 @@
 #!/bin/bash
 
-set -e
+# set -e
 
-cd "$(dirname "$0")"
+# cd "$(dirname "$0")"
 
 
 IMAGE_BACKEND="fraolbmax/guzolink-backend:latest"
@@ -13,28 +13,26 @@ function pause() {
 }
 
 function build() {
-    clear
+    
     echo "======================================"
     echo "Building Docker Images..."
     echo "======================================"
 
-    docker compose build
-
+    docker compose -f docker-compose.build.yml build
     pause
 }
 
 function run_local() {
-    clear
     echo "======================================"
     echo "Starting Local Environment..."
     echo "======================================"
 
-    docker compose down
-    docker compose up --build
+    docker compose -f docker-compose.build.yml down
+    docker compose -f docker-compose.build.yml up --build
 }
 
 function push() {
-    clear
+    
     echo "======================================"
     echo "Pushing Images..."
     echo "======================================"
@@ -46,7 +44,7 @@ function push() {
 }
 
 function pull() {
-    clear
+    
     echo "======================================"
     echo "Pulling Latest Images..."
     echo "======================================"
@@ -57,27 +55,27 @@ function pull() {
 }
 
 function start_prod() {
-    clear
+    
     docker compose up -d
 
     pause
 }
 
 function stop_all() {
-    clear
+    
     docker compose down
 
     pause
 }
 
 function logs() {
-    clear
+    
     docker compose logs -f
 }
 
 while true
 do
-    clear
+    
 
     echo "========================================"
     echo "      GUZOLINK DEPLOYMENT TOOL"
