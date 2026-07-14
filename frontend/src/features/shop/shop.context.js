@@ -188,9 +188,9 @@ function ShopProvider({ children }) {
     }),
     [shops, isLoading, isRefreshing, shopError],
   );
+ // eslint-disable-next-line react-hooks/refs 
+  return createElement(ShopContext.Provider, { value }, children);
 
-  // return createElement(ShopContext.Provider, { value }, children);
-  return createElement(<ShopContext.Provider value={value}>{children}</ShopContext.Provider>)
 }
 
 function useShops() {
