@@ -26,8 +26,9 @@ import CreateProductCard from "./features/products/pages/CreateProduct.jsx";
 // import ProductDetails from "./features/products/pages/ProductDetails";
 
 // shoping and marketing
-// import Cart from "./pages/Cart";
-// import Checkout from "./pages/Checkout";
+import Cart from "./pages/Cart.jsx";
+import Checkout from "./pages/Checkout.jsx";
+import AboutPage from "./pages/About.jsx";
 
 function App() {
   ``;
@@ -39,6 +40,9 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/aboutus" element={<AboutPage />} />
           <Route
             path="/profile/:userId"
             element={

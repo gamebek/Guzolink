@@ -1,10 +1,18 @@
+import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { useCart } from "../features/cart/cart.context.js";
 import { useAuth } from "../features/auth/auth.context.js";
+import ConfirmModal from "./ConfirmModal.jsx";
 
 function Navbar() {
   const { cart } = useCart();
   const { user, logout } = useAuth();
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+
+  const handleLogout = () => {
+    logout();
+    setShowLogoutModal(false);
+  };
 
   return (
     <header className="border-b border-white/10 bg-slate-900/50 backdrop-blur sticky top-0 z-50">
@@ -67,7 +75,7 @@ function Navbar() {
               </span>
 
               <button
-                onClick={logout}
+                onClick={() => setShowLogoutModal(true)}
                 className="rounded-full border border-white/20 px-3 py-1.5 text-sm font-medium text-slate-200 hover:bg-white/10"
               >
                 Logout
@@ -91,6 +99,17 @@ function Navbar() {
           )}
         </div>
       </div>
+
+      <ConfirmModal
+        open={showLogoutModal}
+        title="Log out?"
+        message="You’ll need to sign in again to continue shopping and managing your account."
+        confirmLabel="Yes, log out"
+        cancelLabel="Stay signed in"
+        isDangerous
+        onConfirm={handleLogout}
+        onCancel={() => setShowLogoutModal(false)}
+      />
     </header>
   );
 }
