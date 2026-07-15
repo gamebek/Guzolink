@@ -8,6 +8,7 @@ function Navbar() {
   const { cart } = useCart();
   const { user, logout } = useAuth();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
@@ -15,12 +16,9 @@ function Navbar() {
   };
 
   return (
-    <header className="border-b border-white/10 bg-slate-900/50 backdrop-blur sticky top-0 z-50">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-        <NavLink 
-          to="/"
-          className="text-xl font-semibold tracking-tight text-white"
-        >
+    <header className="sticky top-0 z-50 border-b border-white/10 bg-slate-900/80 backdrop-blur">
+      <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-4 sm:px-6 lg:px-8">
+        <NavLink to="/" className="text-xl font-semibold tracking-tight text-white">
           Guzolink
         </NavLink>
 
@@ -38,10 +36,6 @@ function Navbar() {
           >
             Dashboard
           </NavLink>
-
-          {/* <NavLink to="/shops" className={({ isActive }) => (isActive ? "text-amber-600" : "")}>
-            Dashboard
-          </NavLink> */}
 
           <NavLink
             to="/cart"
@@ -63,20 +57,16 @@ function Navbar() {
           </NavLink>
         </nav>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           {user ? (
             <>
-              {/* IDEA: do i need context provider to show current user profile ? or can i use the dashboard to show the button then clickable button to update user ?
-            Solution:   to use the span and move the profile to dashboard
-            */}
-
               <span className="hidden rounded-full bg-white/10 px-3 py-1 text-sm text-slate-200 sm:inline">
                 Hi, {user.username}
               </span>
 
               <button
                 onClick={() => setShowLogoutModal(true)}
-                className="rounded-full border border-white/20 px-3 py-1.5 text-sm font-medium text-slate-200 hover:bg-white/10"
+                className="rounded-full border border-white/20 px-3 py-1.5 text-sm font-medium text-slate-200 transition hover:bg-white/10"
               >
                 Logout
               </button>
@@ -85,28 +75,69 @@ function Navbar() {
             <>
               <Link
                 to="/login"
-                className="rounded-full border border-white/20 px-3 py-1.5 text-sm font-medium text-slate-200 hover:bg-white/10"
+                className="rounded-full border border-white/20 px-3 py-1.5 text-sm font-medium text-slate-200 transition hover:bg-white/10"
               >
                 Login
               </Link>
               <Link
                 to="/signup"
-                className="rounded-full bg-amber-500 px-3 py-1.5 text-sm font-medium text-slate-950 hover:bg-amber-400"
+                className="rounded-full bg-amber-500 px-3 py-1.5 text-sm font-medium text-slate-950 transition hover:bg-amber-400"
               >
                 Sign up
               </Link>
             </>
           )}
+
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen((open) => !open)}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/20 text-slate-200 transition hover:bg-white/10 md:hidden"
+            aria-label="Toggle navigation"
+          >
+            <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 7h16M4 12h16M4 17h16" />
+            </svg>
+          </button>
         </div>
       </div>
 
-      <ConfirmModal
-        open={showLogoutModal}
-        title="Log out?"
-        message="You’ll need to sign in again to continue shopping and managing your account."
-        confirmLabel="Yes, log out"
-        cancelLabel="Stay signed in"
-        isDangerous
+      <div className={`border-t border-white/10 px-4 py-4 md:hidden ${mobileMenuOpen ? "block" : "hidden"}`}>
+        <div className="mx-auto flex max-w-7xl flex-col gap-3 text-sm font-medium text-slate-200">
+          <NavLink
+            to="/"
+            onClick={() => setMobileMenuOpen(false)}
+            className={({ isActive }) => (isActive ? "text-amber-500" : "")}
+          >
+            Home
+          </NavLink>
+          <NavLink
+            to={`/profile/${user?.id || user?._id}`}
+            onClick={() => setMobileMenuOpen(false)}
+            className={({ isActive }) => (isActive ? "text-amber-500" : "")}
+          >
+            Dashboard
+          </NavLink>
+          <NavLink
+            to="/cart"
+            onClick={() => setMobileMenuOpen(false)}
+            className={({ isActive }) => (isActive ? "text-amber-500" : "")}
+          >
+            Cart ({cart.length})
+          </NavLink>
+          <NavLink
+            to="/aboutus"
+            onClick={() => setMobileMenuOpen(false)}
+            className={({ isActive }) => (isActive ? "text-amber-500" : "")}
+          >
+            About us
+          </NavLink>
+          <NavLink
+            to="/support"
+            onClick={() => setMobileMenuOpen(false)}
+            className={({ isActive }) => (isActive ? "text-amber-500" : "")}
+          >
+            Contact us
+          </NavLink>
         onConfirm={handleLogout}
         onCancel={() => setShowLogoutModal(false)}
       />
